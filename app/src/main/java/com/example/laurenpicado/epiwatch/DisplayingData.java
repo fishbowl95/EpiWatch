@@ -1,9 +1,16 @@
 package com.example.laurenpicado.epiwatch;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -18,6 +25,7 @@ import java.util.UUID;
 
 public class DisplayingData extends AppCompatActivity {
 
+
     private static final UUID MY_UUID_INSECURE =
             UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
@@ -26,16 +34,27 @@ public class DisplayingData extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener mAuthListener;
     private DatabaseReference myRef;
     private static final String TAG = "DisplayingData";
+    private TextView Stress;
+    private String userID;
+
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_displaying_data);
 
+        Stress = (TextView) findViewById(R.id.Stress);
+        //incomingMessages = (TextView) findViewById(incomingMessage);
+        //messages = new StringBuilder();
         mAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter("incomingMessage"));
 
         myRef = mFirebaseDatabase.getReference();
+        userID = user.getUid();
+
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -61,6 +80,16 @@ public class DisplayingData extends AppCompatActivity {
                 // whenever data at this location is updated.
                 Object value = dataSnapshot.getValue();
                 Log.d(TAG, "Value is: " + value);
+                showData(dataSnapshot);
+            }
+
+            private void showData(DataSnapshot dataSnapshot) {
+                for(DataSnapshot ds : dataSnapshot.getChildren()){
+                    UserInfo uInfo = new UserInfo();
+                    uInfo.setStressValue(ds.child(userID).getValue(UserInfo.class).getStressValue());
+                    Stress.setText(uInfo.getStressValue());//get stress readings
+
+                }
             }
 
             @Override
@@ -74,6 +103,41 @@ public class DisplayingData extends AppCompatActivity {
 
 
     }
+        BroadcastReceiver mReceiver = new BroadcastReceiver(){
+            @Override
+            public void onReceive(Context context, Intent intent){
+                String text = intent.getStringExtra("theMessage");
+                text = text.replaceAll("\\r\\n", "");
+
+
+
+            //messages.append(text);
+
+            //String mess = messages.toString();
+            // Write a message to the database
+                if (!text.equals("")) {
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    String userID = user.getUid();
+                //messages.append(text+"\n");
+
+                    myRef.child(userID).child("Stress").setValue(text);//.child(text);.push().setValue("true");
+                    toastMessage("Adding " + text + " to database...");
+                    //Intent i = new Intent(BluetoothActivity.this, DisplayingData.class); //transfering Data
+                    //startActivity(i);
+
+                //reset the text
+
+                }
+
+
+            //incomingmessages.setText(messages);
+
+
+
+            }
+
+
+        };
 
         @Override
         public void onStart(){

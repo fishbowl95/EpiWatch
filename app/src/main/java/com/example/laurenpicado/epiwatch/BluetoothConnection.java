@@ -231,6 +231,8 @@ public class BluetoothConnection {
             }
             mmInStream = tmpIn;
             mmOutStream = tmpOut;
+
+
         }
 
 

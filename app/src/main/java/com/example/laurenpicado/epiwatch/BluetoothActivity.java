@@ -34,6 +34,7 @@ import java.util.UUID;
 
 import static android.R.id.message;
 import static com.example.laurenpicado.epiwatch.R.id.incomingMessage;
+import static com.example.laurenpicado.epiwatch.R.id.textViewSignup;
 
 
 public class BluetoothActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
@@ -253,13 +254,18 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
             @Override
             public void onClick(View view) {
                 startConnection();
+
+
             }
 
         });
 
 
-
     }
+
+
+
+
 
 
         BroadcastReceiver mReceiver = new BroadcastReceiver(){
@@ -281,6 +287,8 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
 
                     myRef.child(userID).child("Stress").setValue(text);//.child(text);.push().setValue("true");
                     toastMessage("Adding " + text + " to database...");
+                    //Intent i = new Intent(BluetoothActivity.this, DisplayingData.class); //transfering Data
+                    //startActivity(i);
 
                     //reset the text
 
@@ -329,6 +337,8 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
     //create method for start connection
     public void startConnection(){
         startBTConnection(mBTDevice,MY_UUID_INSECURE);
+        //Intent i = new Intent(BluetoothActivity.this, DisplayingData.class); //transfering Data
+        //startActivity(i);
     }
 
 
