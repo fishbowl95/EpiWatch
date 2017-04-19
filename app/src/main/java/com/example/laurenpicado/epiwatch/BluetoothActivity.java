@@ -1,5 +1,4 @@
 package com.example.laurenpicado.epiwatch;
-
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -32,9 +31,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import static android.R.id.message;
 import static com.example.laurenpicado.epiwatch.R.id.incomingMessage;
-import static com.example.laurenpicado.epiwatch.R.id.textViewSignup;
 
 
 public class BluetoothActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
@@ -42,6 +39,7 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private DatabaseReference myRef;
+    private Button mData;
 
     private static final String TAG = "BluetoothActivity";
 
@@ -65,7 +63,7 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
 
 
 
-    // Create a BroadcastReceiver for ACTION_FOUND.
+// Create a BroadcastReceiver for ACTION_FOUND.
     private final BroadcastReceiver mBroadcastReceiver1 = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
@@ -187,6 +185,17 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
 
 
         btnStartConnection = (Button) findViewById(R.id.btnStartConnection);
+        Button btnData = (Button) findViewById(R.id.btnData);
+
+        btnData.setOnClickListener(new View.OnClickListener(){
+           @Override
+            public void onClick(View view){
+               Intent i = new Intent(BluetoothActivity.this, DisplayingData.class);
+               startActivity(i);
+
+           }
+        });
+        //mData.setOnClickListener(BluetoothActivity.this);
 
         incomingMessages = (TextView) findViewById(incomingMessage);
         messages = new StringBuilder();
@@ -195,8 +204,15 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
         //databaseStress = FirebaseDatabase.getInstance().getReference("Stress");
         myRef = mFirebaseDatabase.getReference();
         messages = new StringBuilder();
+
         LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter("incomingMessage"));
+
+
         //
+
+
+
+
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -231,8 +247,6 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
         });
 
 
-
-
         //Broadcasts when bond state changes (ie:pairing)
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
         registerReceiver(mBroadcastReceiver4, filter);
@@ -250,10 +264,14 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
         });
 
 
+
         btnStartConnection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startConnection();
+                //Intent DisplayingData = new Intent (BluetoothActivity.this, DisplayingData.class);
+                //startActivity(DisplayingData);
+
 
 
             }
@@ -261,8 +279,11 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
         });
 
 
-    }
 
+
+
+
+    }
 
 
 
@@ -337,9 +358,13 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
     //create method for start connection
     public void startConnection(){
         startBTConnection(mBTDevice,MY_UUID_INSECURE);
+
         //Intent i = new Intent(BluetoothActivity.this, DisplayingData.class); //transfering Data
         //startActivity(i);
     }
+
+
+        ;
 
 
     //starting chat service method

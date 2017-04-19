@@ -25,7 +25,7 @@ import java.util.UUID;
  * Created by laurenpicado on 4/4/17.
  */
 
-public class BluetoothConnection {
+public class BluetoothConnection  {
 
     private static final String TAG = "BluetoothConnectionServ";
 
@@ -211,12 +211,15 @@ public class BluetoothConnection {
         public ConnectedThread(BluetoothSocket socket){
             Log.d(TAG, "ConnectedThread: Starting.");
 
+
             mmSocket = socket;
             InputStream tmpIn = null;
             OutputStream tmpOut = null;
 
             try{
                 mProgressDialog.dismiss();
+                //Intent DisplayingData = new Intent (BluetoothActivity.this, DisplayingData.class);
+                //startActivity(DisplayingData);
 
             } catch(NullPointerException e) {
                     e.printStackTrace();
