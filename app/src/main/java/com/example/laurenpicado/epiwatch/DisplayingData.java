@@ -21,6 +21,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.StringTokenizer;
 import java.util.UUID;
 
 public class DisplayingData extends AppCompatActivity {
@@ -35,6 +36,8 @@ public class DisplayingData extends AppCompatActivity {
     private DatabaseReference myRef;
     private static final String TAG = "DisplayingData";
     TextView Stress;
+    TextView Motion;
+    TextView EMG;
     StringBuilder messages;
 
 
@@ -47,6 +50,9 @@ public class DisplayingData extends AppCompatActivity {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         myRef = mFirebaseDatabase.getReference();
         Stress = (TextView) findViewById(R.id.Stress);
+        Motion = (TextView) findViewById(R.id.Motion);
+        EMG = (TextView) findViewById(R.id.EMG);
+
         messages = new StringBuilder();
         LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter("incomingMessage"));
 
@@ -91,6 +97,10 @@ public class DisplayingData extends AppCompatActivity {
         public void onReceive(Context context, Intent intent){
             String text = intent.getStringExtra("theMessage");
             text = text.replaceAll("\\r\\n", "");
+            StringTokenizer tokens = new StringTokenizer(text, ",");
+            String first = tokens.nextToken();
+            String second = tokens.nextToken();
+            String third = tokens.nextToken();
 
 
 
@@ -106,9 +116,15 @@ public class DisplayingData extends AppCompatActivity {
                 String userID = user.getUid();
                 //messages.append(text+"\n");
 
-                myRef.child(userID).child("Stress").setValue(text);//.child(text);.push().setValue("true");
+                myRef.child(userID).child("Stress").setValue(first);
+                myRef.child(userID).child("Motion").setValue(second);
+                myRef.child(userID).child("EMG").setValue(third);
+
                 toastMessage("Adding " + text + " to database...");
-                Stress.setText(text);
+
+                Stress.setText(first);
+                Motion.setText(second);
+                EMG.setText(third);
 
                 //Intent i = new Intent(BluetoothActivity.this, DisplayingData.class); //transfering Data
                 //startActivity(i);
