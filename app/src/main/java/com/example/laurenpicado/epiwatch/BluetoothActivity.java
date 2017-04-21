@@ -63,7 +63,7 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
 
 
 
-// Create a BroadcastReceiver for ACTION_FOUND.
+    // Create a BroadcastReceiver for ACTION_FOUND.
     private final BroadcastReceiver mBroadcastReceiver1 = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
@@ -188,12 +188,12 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
         Button btnData = (Button) findViewById(R.id.btnData);
 
         btnData.setOnClickListener(new View.OnClickListener(){
-           @Override
+            @Override
             public void onClick(View view){
-               Intent i = new Intent(BluetoothActivity.this, DisplayingData.class);
-               startActivity(i);
+                Intent i = new Intent(BluetoothActivity.this, DisplayingData.class);
+                startActivity(i);
 
-           }
+            }
         });
         //mData.setOnClickListener(BluetoothActivity.this);
 
@@ -289,57 +289,57 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
 
 
 
-        BroadcastReceiver mReceiver = new BroadcastReceiver(){
-            @Override
-            public void onReceive(Context context, Intent intent){
-                String text = intent.getStringExtra("theMessage");
-                text = text.replaceAll("\\r\\n", "");
+    BroadcastReceiver mReceiver = new BroadcastReceiver(){
+        @Override
+        public void onReceive(Context context, Intent intent){
+            String text = intent.getStringExtra("theMessage");
+            text = text.replaceAll("\\r\\n", "");
 
 
 
-                //messages.append(text);
+            //messages.append(text);
 
-                //String mess = messages.toString();
-                // Write a message to the database
-                if (!text.equals("")) {
-                    FirebaseUser user = mAuth.getCurrentUser();
-                    String userID = user.getUid();
-                    //messages.append(text+"\n");
+            //String mess = messages.toString();
+            // Write a message to the database
+            if (!text.equals("")) {
+                FirebaseUser user = mAuth.getCurrentUser();
+                String userID = user.getUid();
+                //messages.append(text+"\n");
 
-                    myRef.child(userID).child("Stress").setValue(text);//.child(text);.push().setValue("true");
-                    toastMessage("Adding " + text + " to database...");
-                    //Intent i = new Intent(BluetoothActivity.this, DisplayingData.class); //transfering Data
-                    //startActivity(i);
+                myRef.child(userID).child("Stress").setValue(text);//.child(text);.push().setValue("true");
+                toastMessage("Adding " + text + " to database...");
+                //Intent i = new Intent(BluetoothActivity.this, DisplayingData.class); //transfering Data
+                //startActivity(i);
 
-                    //reset the text
-
-                }
-
-
-                //incomingmessages.setText(messages);
-
-
+                //reset the text
 
             }
 
 
-        };
+            //incomingmessages.setText(messages);
 
 
 
-
-        @Override
-        public void onStart(){
-            super.onStart();
-            mAuth.addAuthStateListener(mAuthListener);
         }
-        @Override
-        public void onStop(){
-            super.onStop();
-            if(mAuthListener != null){
-                mAuth.removeAuthStateListener(mAuthListener);
-            }
+
+
+    };
+
+
+
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        mAuth.addAuthStateListener(mAuthListener);
+    }
+    @Override
+    public void onStop(){
+        super.onStop();
+        if(mAuthListener != null){
+            mAuth.removeAuthStateListener(mAuthListener);
         }
+    }
     private void toastMessage(String message){
         Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
 
@@ -364,7 +364,7 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
     }
 
 
-        ;
+    ;
 
 
     //starting chat service method
@@ -400,9 +400,9 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
         }
     }
     public void btnEnableDisable_Discoverable(View view){
-      Log.d(TAG, "btnEnableDisable_Discoverable: Making device discoverable for 300 seconds.");
-      Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
-      discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION,300);
+        Log.d(TAG, "btnEnableDisable_Discoverable: Making device discoverable for 300 seconds.");
+        Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+        discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION,300);
         startActivity(discoverableIntent);
 
         IntentFilter intentFilter = new IntentFilter(mBluetoothAdapter.ACTION_SCAN_MODE_CHANGED);
@@ -440,7 +440,7 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
 
             }
         }else{
-                Log.d(TAG, "checkBTPermissions:No need to check permissions. SDK version < LOLIPOP.");
+            Log.d(TAG, "checkBTPermissions:No need to check permissions. SDK version < LOLIPOP.");
         }
     }
     @Override
