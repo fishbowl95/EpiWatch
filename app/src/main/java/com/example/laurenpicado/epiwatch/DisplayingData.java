@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.IntentSender;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -31,10 +32,22 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.jjoe64.graphview.DefaultLabelFormatter;
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.GridLabelRenderer;
+import com.jjoe64.graphview.Viewport;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
+import java.text.NumberFormat;
+import android.os.Handler;
 
+
+import java.util.Random;
 import java.util.StringTokenizer;
 import java.util.UUID;
 
+import static com.example.laurenpicado.epiwatch.R.id.graph;
+import static com.example.laurenpicado.epiwatch.R.layout.activity_displaying_data;
 
 
 public class DisplayingData extends AppCompatActivity implements ConnectionCallbacks,
@@ -55,17 +68,28 @@ public class DisplayingData extends AppCompatActivity implements ConnectionCallb
     private LocationRequest mLocationRequest;
     private double currentLatitude;
     private double currentLongitude;
+    private static final Random RANDOM = new Random();
+
+    private final Handler mHandler = new Handler();
+    private Runnable mTimer;
+    private double graphLastXValue = 5d;
+    private LineGraphSeries<DataPoint> mSeries;
+
     TextView Stress;
     TextView Motion;
     TextView EMG;
+    StringBuilder Contacts;
     StringBuilder messages;
-    TextView GPS;
+
+    //GraphView GraphView;
+    //GraphView graph;
+
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_displaying_data);
+        setContentView(activity_displaying_data);
 
         mAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -73,7 +97,20 @@ public class DisplayingData extends AppCompatActivity implements ConnectionCallb
         Stress = (TextView) findViewById(R.id.Stress);
         Motion = (TextView) findViewById(R.id.Motion);
         EMG = (TextView) findViewById(R.id.EMG);
-        GPS = (TextView) findViewById(R.id.GPS);
+
+        GraphView graph = (GraphView) findViewById(R.id.graph);
+        //initGraph(graph);
+
+        graph.getViewport().setXAxisBoundsManual(true);
+        graph.getViewport().setMinX(0);
+        graph.getViewport().setMaxX(4);
+
+        graph.getGridLabelRenderer().setLabelVerticalWidth(100);
+        mSeries = new LineGraphSeries<>();
+        mSeries.setDrawDataPoints(true);
+        mSeries.setDrawBackground(true);
+        graph.addSeries(mSeries);
+
 
         messages = new StringBuilder();
         LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter("incomingMessage"));
@@ -119,6 +156,8 @@ public class DisplayingData extends AppCompatActivity implements ConnectionCallb
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
+
+
                 Object value = dataSnapshot.getValue();
                 Log.d(TAG, "Value is: " + value);
             }
@@ -134,6 +173,8 @@ public class DisplayingData extends AppCompatActivity implements ConnectionCallb
 
 
     }
+
+
 
     public void sendText(View view){
 
@@ -215,10 +256,23 @@ public class DisplayingData extends AppCompatActivity implements ConnectionCallb
         super.onResume();
         //Now lets connect to the API
         mGoogleApiClient.connect();
+        mTimer = new Runnable() {
+            @Override
+            public void run() {
+                graphLastXValue += 0.25d;
+                mSeries.appendData(new DataPoint(graphLastXValue, getRandom()), true, 22);
+                mHandler.postDelayed(this, 330);
+            }
+        };
+        mHandler.postDelayed(mTimer, 1500);
+
+
     }
 
     @Override
     protected void onPause() {
+        mHandler.removeCallbacks(mTimer);
+
         super.onPause();
         Log.v(this.getClass().getSimpleName(), "onPause()");
 
@@ -293,6 +347,22 @@ public class DisplayingData extends AppCompatActivity implements ConnectionCallb
 
         Toast.makeText(this, currentLatitude + " WORKS " + currentLongitude + "", Toast.LENGTH_LONG).show();
     }
+
+
+
+    double mLastRandom = 2;
+    Random mRand = new Random();
+    private double getRandom() {
+        return mLastRandom += mRand.nextDouble()*0.5 - 0.25;
+    }
+
+
+
+
+
+
+
+
 
 
 
