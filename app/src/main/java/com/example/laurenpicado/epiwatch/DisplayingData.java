@@ -74,6 +74,8 @@ public class DisplayingData extends AppCompatActivity implements ConnectionCallb
     private Runnable mTimer;
     private double graphLastXValue = 5d;
     private LineGraphSeries<DataPoint> mSeries;
+    private LineGraphSeries<DataPoint> mSeries1;
+    private LineGraphSeries<DataPoint> mSeries2;
 
     TextView Stress;
     TextView Motion;
@@ -108,8 +110,18 @@ public class DisplayingData extends AppCompatActivity implements ConnectionCallb
         graph.getGridLabelRenderer().setLabelVerticalWidth(100);
         mSeries = new LineGraphSeries<>();
         mSeries.setDrawDataPoints(true);
-        mSeries.setDrawBackground(true);
+        mSeries.setDrawBackground(false);
+        mSeries1 = new LineGraphSeries<>();
+        mSeries1.setDrawDataPoints(true);
+        mSeries1.setDrawBackground(false);
+        mSeries1.setColor(Color.RED);
+        mSeries2 = new LineGraphSeries<>();
+        mSeries2.setDrawDataPoints(true);
+        mSeries2.setDrawBackground(false);
+        mSeries2.setColor(Color.parseColor("#9400D3"));
         graph.addSeries(mSeries);
+        graph.addSeries(mSeries1);
+        graph.addSeries(mSeries2);
 
 
         messages = new StringBuilder();
@@ -261,6 +273,8 @@ public class DisplayingData extends AppCompatActivity implements ConnectionCallb
             public void run() {
                 graphLastXValue += 0.25d;
                 mSeries.appendData(new DataPoint(graphLastXValue, getRandom()), true, 22);
+                mSeries1.appendData(new DataPoint(graphLastXValue, getRandom()), true, 22);
+                mSeries2.appendData(new DataPoint(graphLastXValue, getRandom()), true, 22);
                 mHandler.postDelayed(this, 330);
             }
         };
