@@ -80,26 +80,17 @@
         android:layout_marginTop="105dp">
     </ListView>
 
-    <TextView
-        android:id="@+id/incomingMessage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="20dp"
-        android:text="Incoming Messages" />
-
     <Button
         android:id="@+id/btnData"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/incomingMessage"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="12dp"
-        android:text="See Data"/>
+        android:layout_marginBottom="34dp"
+        android:text="See Data"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/btnDiscoverable_on_off"
+        android:layout_alignStart="@+id/btnDiscoverable_on_off"
+        android:layout_marginLeft="21dp"
+        android:layout_marginStart="21dp" />
 
 
 </RelativeLayout>

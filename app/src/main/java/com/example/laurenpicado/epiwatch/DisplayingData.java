@@ -8,15 +8,19 @@ import android.content.IntentSender;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -32,22 +36,18 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.GridLabelRenderer;
-import com.jjoe64.graphview.Viewport;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
-import java.text.NumberFormat;
-import android.os.Handler;
 
-
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.StringTokenizer;
 import java.util.UUID;
 
-import static com.example.laurenpicado.epiwatch.R.id.graph;
 import static com.example.laurenpicado.epiwatch.R.layout.activity_displaying_data;
+import static com.twilio.client.impl.TwilioImpl.context;
 
 
 public class DisplayingData extends AppCompatActivity implements ConnectionCallbacks,
@@ -76,6 +76,8 @@ public class DisplayingData extends AppCompatActivity implements ConnectionCallb
     private LineGraphSeries<DataPoint> mSeries;
     private LineGraphSeries<DataPoint> mSeries1;
     private LineGraphSeries<DataPoint> mSeries2;
+    private List<Person> persons;
+    private RecyclerView rv;
 
     TextView Stress;
     TextView Motion;
@@ -99,6 +101,15 @@ public class DisplayingData extends AppCompatActivity implements ConnectionCallb
         Stress = (TextView) findViewById(R.id.Stress);
         Motion = (TextView) findViewById(R.id.Motion);
         EMG = (TextView) findViewById(R.id.EMG);
+
+        rv = (RecyclerView)findViewById(R.id.rv);
+        rv.setHasFixedSize(true);
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        rv.setLayoutManager(llm);
+        initializeData();
+        initializeAdapter();
+
+
 
         GraphView graph = (GraphView) findViewById(R.id.graph);
         //initGraph(graph);
@@ -368,6 +379,18 @@ public class DisplayingData extends AppCompatActivity implements ConnectionCallb
     Random mRand = new Random();
     private double getRandom() {
         return mLastRandom += mRand.nextDouble()*0.5 - 0.25;
+    }
+
+    private void initializeData(){
+        persons = new ArrayList<>();
+        persons.add(new Person("Seizure detected!", "23 years old" ));
+        persons.add(new Person("Seizure detected!", "25 years old" ));
+        persons.add(new Person("Seizure detected!", "35 years old"));
+    }
+
+    private void initializeAdapter(){
+        RVAdapter adapter = new RVAdapter(persons);
+        rv.setAdapter(adapter);
     }
 
 

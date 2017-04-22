@@ -108,7 +108,7 @@ public class AddToDataBase extends AppCompatActivity {
                     FirebaseUser user = mAuth.getCurrentUser();
                     String userID = user.getUid();
                     //databaseStress.push().getKey();
-                    myRef.child(userID).child("Emergency Contacts").child(newContact).setValue("true");
+                    myRef.child(userID).child("Emergency_Contacts").child(newContact).setValue("true");
                     toastMessage("Adding " + newContact + " to database...");
                     //reset the text
                     mNewContact.setText("");

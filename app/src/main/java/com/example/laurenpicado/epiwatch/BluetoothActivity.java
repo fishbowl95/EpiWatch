@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.telephony.SmsManager;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -31,7 +32,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import static com.example.laurenpicado.epiwatch.R.id.incomingMessage;
+//import static com.example.laurenpicado.epiwatch.R.id.GPS;
+//import static com.example.laurenpicado.epiwatch.R.id.incomingMessage;
 
 
 public class BluetoothActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
@@ -48,6 +50,7 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
 
     TextView incomingMessages;
     StringBuilder messages;
+
 
 
     private static final UUID MY_UUID_INSECURE =
@@ -197,7 +200,7 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
         });
         //mData.setOnClickListener(BluetoothActivity.this);
 
-        incomingMessages = (TextView) findViewById(incomingMessage);
+        //incomingMessages = (TextView) findViewById(incomingMessage);
         messages = new StringBuilder();
         mAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -206,6 +209,7 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
         messages = new StringBuilder();
 
         LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter("incomingMessage"));
+
 
 
         //
@@ -289,6 +293,10 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
 
 
 
+
+
+
+
     BroadcastReceiver mReceiver = new BroadcastReceiver(){
         @Override
         public void onReceive(Context context, Intent intent){
@@ -324,6 +332,7 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
 
 
     };
+
 
 
 
