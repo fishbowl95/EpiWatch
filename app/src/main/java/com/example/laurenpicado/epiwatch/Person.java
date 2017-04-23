@@ -5,13 +5,15 @@ package com.example.laurenpicado.epiwatch;
  */
 
 class Person {
-    String name;
-    String age;
+    String stress;
+    String motion;
+    String emg;
 
 
-    Person(String name, String age) {
-        this.name = name;
-        this.age = age;
+    Person(String stress, String motion ,String emg) {
+        this.stress = stress;
+        this.motion = motion;
+        this.emg = emg;
 
     }
 }

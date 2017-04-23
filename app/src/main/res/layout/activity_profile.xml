@@ -8,6 +8,7 @@
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
     android:paddingTop="16dp"
+    android:gravity="center"
     tools:context="com.example.laurenpicado.epiwatch.RegisterActivity">
 
 
@@ -26,8 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="TextView"
-            android:textSize="18sp"
-            android:textAppearance="@android:style/TextAppearance.Material.Large" />
+            android:textSize="18sp" />
 
         <Button
             android:id="@+id/buttonLogout"
@@ -36,6 +36,8 @@
             android:layout_height="wrap_content"
             android:background="?android:attr/textColorSecondary"
             android:text="Logout" />
+
+
 
         <Button
             android:id="@+id/buttonConnectEpiWatch"

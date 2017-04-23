@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -15,17 +14,19 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder> 
     public static class PersonViewHolder extends RecyclerView.ViewHolder {
 
         CardView cv;
-        TextView personName;
-        TextView personAge;
-        ImageView personPhoto;
+        TextView personStress;
+        TextView personMotion;
+        TextView personEMG;
+
 
 
 
         PersonViewHolder(View itemView) {
             super(itemView);
             cv = (CardView)itemView.findViewById(R.id.cv);
-            personName = (TextView)itemView.findViewById(R.id.person_name);
-            personAge = (TextView)itemView.findViewById(R.id.person_age);
+            personStress = (TextView)itemView.findViewById(R.id.person_stress);
+            personMotion = (TextView)itemView.findViewById(R.id.person_motion);
+            personEMG = (TextView)itemView.findViewById(R.id.person_emg);
 
         }
     }
@@ -50,8 +51,9 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder> 
 
     @Override
     public void onBindViewHolder(PersonViewHolder personViewHolder, int i) {
-        personViewHolder.personName.setText(persons.get(i).name);
-        personViewHolder.personAge.setText(persons.get(i).age);
+        personViewHolder.personStress.setText(persons.get(i).stress);
+        personViewHolder.personMotion.setText(persons.get(i).motion);
+        personViewHolder.personEMG.setText(persons.get(i).emg);
 
     }
 

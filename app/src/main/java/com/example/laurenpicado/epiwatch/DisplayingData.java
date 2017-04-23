@@ -21,7 +21,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
@@ -37,6 +36,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.GridLabelRenderer;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
@@ -47,7 +47,6 @@ import java.util.StringTokenizer;
 import java.util.UUID;
 
 import static com.example.laurenpicado.epiwatch.R.layout.activity_displaying_data;
-import static com.twilio.client.impl.TwilioImpl.context;
 
 
 public class DisplayingData extends AppCompatActivity implements ConnectionCallbacks,
@@ -85,6 +84,11 @@ public class DisplayingData extends AppCompatActivity implements ConnectionCallb
     StringBuilder Contacts;
     StringBuilder messages;
 
+
+
+
+
+
     //GraphView GraphView;
     //GraphView graph;
 
@@ -101,6 +105,8 @@ public class DisplayingData extends AppCompatActivity implements ConnectionCallb
         Stress = (TextView) findViewById(R.id.Stress);
         Motion = (TextView) findViewById(R.id.Motion);
         EMG = (TextView) findViewById(R.id.EMG);
+
+
 
         rv = (RecyclerView)findViewById(R.id.rv);
         rv.setHasFixedSize(true);
@@ -119,15 +125,16 @@ public class DisplayingData extends AppCompatActivity implements ConnectionCallb
         graph.getViewport().setMaxX(4);
 
         graph.getGridLabelRenderer().setLabelVerticalWidth(100);
+
         mSeries = new LineGraphSeries<>();
-        mSeries.setDrawDataPoints(true);
+        mSeries.setDrawDataPoints(false);
         mSeries.setDrawBackground(false);
         mSeries1 = new LineGraphSeries<>();
-        mSeries1.setDrawDataPoints(true);
+        mSeries1.setDrawDataPoints(false);
         mSeries1.setDrawBackground(false);
         mSeries1.setColor(Color.RED);
         mSeries2 = new LineGraphSeries<>();
-        mSeries2.setDrawDataPoints(true);
+        mSeries2.setDrawDataPoints(false);
         mSeries2.setDrawBackground(false);
         mSeries2.setColor(Color.parseColor("#9400D3"));
         graph.addSeries(mSeries);
@@ -164,7 +171,7 @@ public class DisplayingData extends AppCompatActivity implements ConnectionCallb
                 if (user != null) {
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                    toastMessage("Successfully signed in with: " + user.getEmail());
+                    //toastMessage("Successfully signed in with: " + user.getEmail());
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
@@ -234,7 +241,7 @@ public class DisplayingData extends AppCompatActivity implements ConnectionCallb
                 myRef.child(userID).child("Motion").setValue(second);
                 myRef.child(userID).child("EMG").setValue(third);
 
-                toastMessage("Adding " + text + " to database...");
+                //toastMessage("Adding " + text + " to database...");
 
                 Stress.setText(first);
                 Motion.setText(second);
@@ -322,7 +329,7 @@ public class DisplayingData extends AppCompatActivity implements ConnectionCallb
             currentLatitude = location.getLatitude();
             currentLongitude = location.getLongitude();
 
-            Toast.makeText(this, currentLatitude + " WORKS " + currentLongitude + "", Toast.LENGTH_LONG).show();
+            Toast.makeText(this,"Lat:"+ currentLatitude + " Long:" + currentLongitude + "", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -370,7 +377,7 @@ public class DisplayingData extends AppCompatActivity implements ConnectionCallb
         currentLatitude = location.getLatitude();
         currentLongitude = location.getLongitude();
 
-        Toast.makeText(this, currentLatitude + " WORKS " + currentLongitude + "", Toast.LENGTH_LONG).show();
+        Toast.makeText(this,"Lat:"+ currentLatitude + " Long:" + currentLongitude + "", Toast.LENGTH_LONG).show();
     }
 
 
@@ -383,9 +390,9 @@ public class DisplayingData extends AppCompatActivity implements ConnectionCallb
 
     private void initializeData(){
         persons = new ArrayList<>();
-        persons.add(new Person("Seizure detected!", "23 years old" ));
-        persons.add(new Person("Seizure detected!", "25 years old" ));
-        persons.add(new Person("Seizure detected!", "35 years old"));
+        persons.add(new Person("Stress:", "Motion:", "EMG:"));
+        persons.add(new Person("Stress:", "Motion:", "EMG:"));
+        persons.add(new Person("Stress:", "Motion:", "EMG:"));
     }
 
     private void initializeAdapter(){
