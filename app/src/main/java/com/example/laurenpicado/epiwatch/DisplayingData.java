@@ -209,7 +209,7 @@ public class DisplayingData extends AppCompatActivity implements ConnectionCallb
     public void sendText(View view){
 
         SmsManager smsManager = SmsManager.getDefault();
-        smsManager.sendTextMessage("6505551212",null,"I am having a seizure"+" "+"at Lat:"+currentLatitude+" "+"Long:"+currentLongitude,null, null);
+        smsManager.sendTextMessage("+15619327208",null,"I am having a seizure"+" "+"at Lat:"+currentLatitude+" "+"Long:"+currentLongitude,null, null);
 
     }
 
