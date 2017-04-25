@@ -4,7 +4,23 @@
     android:layout_height="match_parent">
 
     <EditText
-        android:id="@+id/emer_contacts"
+        android:id="@+id/emer_contacts1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="Enter Emergency Contacts"
+        android:textAlignment="center" />
+    <EditText
+        android:id="@+id/emer_contacts2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="Enter Emergency Contacts"
+        android:textAlignment="center" />
+    <EditText
+        android:id="@+id/emer_contacts3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"

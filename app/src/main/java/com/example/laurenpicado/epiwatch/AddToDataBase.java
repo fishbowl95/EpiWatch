@@ -32,7 +32,10 @@ public class AddToDataBase extends AppCompatActivity {
 
     private static final String TAG = "AddToDataBase";
     private Button mAddToDB;
-    private EditText mNewContact;
+    private EditText mNewContact1;
+    private EditText mNewContact2;
+    private EditText mNewContact3;
+
     private static final UUID MY_UUID_INSECURE =
             UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     BluetoothDevice mBTDevice;
@@ -57,7 +60,9 @@ public class AddToDataBase extends AppCompatActivity {
         //declare varaibles
 
         mAddToDB = (Button) findViewById(R.id.btnaddnewcontact);
-        mNewContact = (EditText) findViewById(R.id.emer_contacts);
+        mNewContact1 = (EditText) findViewById(R.id.emer_contacts1);
+        mNewContact2 = (EditText) findViewById(R.id.emer_contacts2);
+        mNewContact3 = (EditText) findViewById(R.id.emer_contacts3);
 
         mAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -103,21 +108,40 @@ public class AddToDataBase extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "onClick: Attempting to add object to database.");
-                String newContact = mNewContact.getText().toString();
-                if (!newContact.equals("")) {
+                String newContact1 = mNewContact1.getText().toString();
+                String newContact2 = mNewContact2.getText().toString();
+                String newContact3 = mNewContact3.getText().toString();
+
+                if (!newContact1.equals("")) {
                     FirebaseUser user = mAuth.getCurrentUser();
                     String userID = user.getUid();
                     //databaseStress.push().getKey();
-                    myRef.child(userID).child("Emergency_Contacts").child(newContact).setValue("true");
-                    toastMessage("Adding " + newContact + " to database...");
+                    myRef.child(userID).child("Emergency_Contacts").child("Contact_1").setValue(newContact1);
+                    toastMessage("Adding " + newContact1 + " to database...");
                     //reset the text
-                    mNewContact.setText("");
+                    mNewContact1.setText("");
+                }
+
+                if (!newContact2.equals("")) {
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    String userID = user.getUid();
+                    //databaseStress.push().getKey();
+                    myRef.child(userID).child("Emergency_Contacts").child("Contact_2").setValue(newContact2);
+                    toastMessage("Adding " + newContact2 + " to database...");
+                    //reset the text
+                    mNewContact2.setText("");
+                }
+                if (!newContact3.equals("")) {
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    String userID = user.getUid();
+                    //databaseStress.push().getKey();
+                    myRef.child(userID).child("Emergency_Contacts").child("Contact_3").setValue(newContact3);
+                    toastMessage("Adding " + newContact3 + " to database...");
+                    //reset the text
+                    mNewContact3.setText("");
                 }
             }
         });
-
-
-
     }
 
         @Override

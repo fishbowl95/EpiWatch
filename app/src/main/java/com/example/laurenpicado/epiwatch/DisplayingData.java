@@ -77,12 +77,21 @@ public class DisplayingData extends AppCompatActivity implements ConnectionCallb
     private LineGraphSeries<DataPoint> mSeries2;
     private List<Person> persons;
     private RecyclerView rv;
+    private FirebaseUser user = mAuth.getCurrentUser();
+    private String contact_1;
+    private String contact_2;
+    private String contact_3;
+
+
+
 
     TextView Stress;
     TextView Motion;
     TextView EMG;
     StringBuilder Contacts;
     StringBuilder messages;
+
+
 
 
 
@@ -105,6 +114,7 @@ public class DisplayingData extends AppCompatActivity implements ConnectionCallb
         Stress = (TextView) findViewById(R.id.Stress);
         Motion = (TextView) findViewById(R.id.Motion);
         EMG = (TextView) findViewById(R.id.EMG);
+        FirebaseUser user = mAuth.getCurrentUser();
 
 
 
@@ -189,8 +199,15 @@ public class DisplayingData extends AppCompatActivity implements ConnectionCallb
 
 
                 Object value = dataSnapshot.getValue();
+                showData(dataSnapshot);
+
+
+
                 Log.d(TAG, "Value is: " + value);
             }
+
+
+
 
             @Override
             public void onCancelled(DatabaseError error) {
@@ -204,12 +221,39 @@ public class DisplayingData extends AppCompatActivity implements ConnectionCallb
 
     }
 
+    private void showData(DataSnapshot dataSnapshot) {
+
+
+        for(DataSnapshot ds: dataSnapshot.getChildren()){
+
+            UserInformation uInfo = new UserInformation();
+
+            uInfo.setContact_1(ds.child(user.getUid()).child("Emergency_Contacts").getValue(UserInformation.class).getContact_1());
+            uInfo.setContact_2(ds.child(user.getUid()).child("Emergency_Contacts").getValue(UserInformation.class).getContact_2());
+            uInfo.setContact_3(ds.child(user.getUid()).child("Emergency_Contacts").getValue(UserInformation.class).getContact_3());
+
+            contact_1 = uInfo.getContact_1();
+            contact_2 = uInfo.getContact_2();
+            contact_3 = uInfo.getContact_3();
+
+
+
+
+
+
+        }
+    }
+
+
+
 
 
     public void sendText(View view){
 
         SmsManager smsManager = SmsManager.getDefault();
-        smsManager.sendTextMessage("+15619327208",null,"I am having a seizure"+" "+"at Lat:"+currentLatitude+" "+"Long:"+currentLongitude,null, null);
+        smsManager.sendTextMessage(contact_1,null,"I am having a seizure"+" "+"at Lat:"+currentLatitude+" "+"Long:"+currentLongitude,null, null);
+        smsManager.sendTextMessage(contact_2,null,"I am having a seizure"+" "+"at Lat:"+currentLatitude+" "+"Long:"+currentLongitude,null, null);
+        smsManager.sendTextMessage(contact_3,null,"I am having a seizure"+" "+"at Lat:"+currentLatitude+" "+"Long:"+currentLongitude,null, null);
 
     }
 
