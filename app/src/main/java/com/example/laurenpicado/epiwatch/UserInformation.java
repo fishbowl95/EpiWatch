@@ -12,6 +12,8 @@ public class UserInformation {
 
 
 
+
+
     public UserInformation(){
 
     }
@@ -39,6 +41,8 @@ public class UserInformation {
     public void setContact_3(String Contact_3) {
         this.Contact_3 = Contact_3;
     }
+
+
 
 
 }

@@ -21,6 +21,9 @@ import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.UUID;
 
+import app.akexorcist.bluetotohspp.library.BluetoothSPP;
+
+
 /**
  * Created by laurenpicado on 4/4/17.
  */
@@ -50,6 +53,9 @@ public class BluetoothConnection  {
     private UUID deviceUUID;
     ProgressDialog mProgressDialog;
     private ConnectedThread mConnectedThread;
+
+    private BluetoothSPP mBluetoothSPP;
+
 
     public BluetoothConnection(Context context){
         mContext = context;
@@ -112,6 +118,8 @@ public class BluetoothConnection  {
         }
 
     }
+
+
     //This thread runs while attempting to make an outgoing connection with a device
     //It runs straight through; the connection either succeds or fails
 
@@ -169,6 +177,9 @@ public class BluetoothConnection  {
                 Log.e(TAG, "cancel:close() of mmSocket in Connectthread failed."+ e.getMessage());
             }
         }
+
+
+
     }
 
 
@@ -241,6 +252,7 @@ public class BluetoothConnection  {
 
 
 
+
         public void run(){
             byte[] buffer = new byte[1024]; //buffer store for the stream
             int bytes; //bytes returned from read()
@@ -257,10 +269,14 @@ public class BluetoothConnection  {
                         String incomingMessage = new String(buffer, 0, bytes);
 
 
+
+
                         Log.d(TAG, "Input Stream: " + incomingMessage);
 
                         Intent IncomingMessageIntent = new Intent("incomingMessage");
                         IncomingMessageIntent.putExtra("theMessage", incomingMessage);
+
+
 
 
                         LocalBroadcastManager.getInstance(mContext).sendBroadcast(IncomingMessageIntent);
@@ -271,6 +287,7 @@ public class BluetoothConnection  {
 
                 } catch (IOException e){
                     Log.e(TAG, "write:Error reading inputStream." + e.getMessage());
+                    e.printStackTrace();
                     break;
                 }
 

@@ -1,4 +1,5 @@
 package com.example.laurenpicado.epiwatch;
+
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -6,11 +7,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -19,7 +20,6 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.telephony.SmsManager;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -42,6 +42,8 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
     private FirebaseAuth.AuthStateListener mAuthListener;
     private DatabaseReference myRef;
     private Button mData;
+    SharedPreferences sharedPref;
+    private CharSequence mTitle;
 
     private static final String TAG = "BluetoothActivity";
 
@@ -208,7 +210,7 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
         myRef = mFirebaseDatabase.getReference();
         messages = new StringBuilder();
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter("incomingMessage"));
+        //LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter("incomingMessage"));
 
 
 
@@ -297,41 +299,6 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
 
 
 
-    BroadcastReceiver mReceiver = new BroadcastReceiver(){
-        @Override
-        public void onReceive(Context context, Intent intent){
-            String text = intent.getStringExtra("theMessage");
-            text = text.replaceAll("\\r\\n", "");
-
-
-
-            //messages.append(text);
-
-            //String mess = messages.toString();
-            // Write a message to the database
-            if (!text.equals("")) {
-                FirebaseUser user = mAuth.getCurrentUser();
-                String userID = user.getUid();
-                //messages.append(text+"\n");
-
-                myRef.child(userID).child("Stress").setValue(text);//.child(text);.push().setValue("true");
-                toastMessage("Adding " + text + " to database...");
-                //Intent i = new Intent(BluetoothActivity.this, DisplayingData.class); //transfering Data
-                //startActivity(i);
-
-                //reset the text
-
-            }
-
-
-            //incomingmessages.setText(messages);
-
-
-
-        }
-
-
-    };
 
 
 

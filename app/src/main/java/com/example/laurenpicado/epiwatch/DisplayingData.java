@@ -36,23 +36,23 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.GridLabelRenderer;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Random;
 import java.util.StringTokenizer;
 import java.util.UUID;
 
-import static android.R.attr.value;
 import static com.example.laurenpicado.epiwatch.R.layout.activity_displaying_data;
 
 
 public class DisplayingData extends AppCompatActivity implements ConnectionCallbacks,
         OnConnectionFailedListener,
-        LocationListener{
+        LocationListener {
 
 
     private static final UUID MY_UUID_INSECURE =
@@ -79,6 +79,10 @@ public class DisplayingData extends AppCompatActivity implements ConnectionCallb
     private List<Person> persons;
     private RecyclerView rv;
 
+    private Integer st;
+    private Integer mo;
+    private Integer em;
+
     TextView Stress;
     TextView Motion;
     TextView EMG;
@@ -86,13 +90,8 @@ public class DisplayingData extends AppCompatActivity implements ConnectionCallb
     StringBuilder messages;
 
 
-
-
-
-
     //GraphView GraphView;
     //GraphView graph;
-
 
 
     @Override
@@ -108,14 +107,12 @@ public class DisplayingData extends AppCompatActivity implements ConnectionCallb
         EMG = (TextView) findViewById(R.id.EMG);
 
 
-
-        rv = (RecyclerView)findViewById(R.id.rv);
+        rv = (RecyclerView) findViewById(R.id.rv);
         rv.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         rv.setLayoutManager(llm);
         initializeData();
         initializeAdapter();
-
 
 
         GraphView graph = (GraphView) findViewById(R.id.graph);
@@ -161,10 +158,6 @@ public class DisplayingData extends AppCompatActivity implements ConnectionCallb
                 .setFastestInterval(1 * 1000); // 1 second, in milliseconds
 
 
-
-
-
-
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -194,7 +187,6 @@ public class DisplayingData extends AppCompatActivity implements ConnectionCallb
                 Log.d(TAG, "Value is: " + value);
 
 
-
             }
 
 
@@ -206,75 +198,76 @@ public class DisplayingData extends AppCompatActivity implements ConnectionCallb
         });
 
 
-
-
     }
 
 
-
-
-
-    public void sendText(View view){
+    public void sendText(View view) {
 
 
         SmsManager smsManager = SmsManager.getDefault();
-        smsManager.sendTextMessage("6505551212",null,"I am having a seizure"+" "+"at Lat:"+currentLatitude+" "+"Long:"+currentLongitude,null, null);
-        smsManager.sendTextMessage("6505551212",null,"I am having a seizure"+" "+"at Lat:"+currentLatitude+" "+"Long:"+currentLongitude,null, null);
-        smsManager.sendTextMessage("6505551212",null,"I am having a seizure"+" "+"at Lat:"+currentLatitude+" "+"Long:"+currentLongitude,null, null);
+        smsManager.sendTextMessage("6505551212", null, "I am having a seizure" + " " + "at Lat:" + currentLatitude + " " + "Long:" + currentLongitude, null, null);
+        smsManager.sendTextMessage("6505551212", null, "I am having a seizure" + " " + "at Lat:" + currentLatitude + " " + "Long:" + currentLongitude, null, null);
+        smsManager.sendTextMessage("6505551212", null, "I am having a seizure" + " " + "at Lat:" + currentLatitude + " " + "Long:" + currentLongitude, null, null);
 
 
     }
 
-    BroadcastReceiver mReceiver = new BroadcastReceiver(){
+    BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
-        public void onReceive(Context context, Intent intent){
+        public void onReceive(Context context, Intent intent) {
             String text = intent.getStringExtra("theMessage");
             text = text.replaceAll("\\r\\n", "");
-            StringTokenizer tokens = new StringTokenizer(text, ",");
-            String first = tokens.nextToken();
-            String second = tokens.nextToken();
-            String third = tokens.nextToken();
 
 
+            try {
 
 
+                StringTokenizer tokens = new StringTokenizer(text, ",");
+                String first = tokens.nextToken();
+                String second = tokens.nextToken();
+                String third = tokens.nextToken();
 
 
-            //messages.append(text);
+                st = Integer.valueOf(first);
+                mo = Integer.valueOf(second);
+                em = Integer.valueOf(third);
 
-            //String mess = messages.toString();
-            // Write a message to the database
-            if (!text.equals("")) {
-                FirebaseUser user = mAuth.getCurrentUser();
-                String userID = user.getUid();
-                //messages.append(text+"\n");
+                if (!text.equals("")) {
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    String userID = user.getUid();
+                    //messages.append(text+"\n");
 
-                myRef.child(userID).child("Stress").setValue(first);
-                myRef.child(userID).child("Motion").setValue(second);
-                myRef.child(userID).child("EMG").setValue(third);
+                    myRef.child(userID).child("Stress").setValue(first);
+                    myRef.child(userID).child("Motion").setValue(second);
+                    myRef.child(userID).child("EMG").setValue(third);
 
-                //toastMessage("Adding " + text + " to database...");
+                    //toastMessage("Adding " + text + " to database...");
 
-                Stress.setText(first);
-                Motion.setText(second);
-                EMG.setText(third);
+                    Stress.setText(first);
+                    Motion.setText(second);
+                    EMG.setText(third);
 
-                //Intent i = new Intent(BluetoothActivity.this, DisplayingData.class); //transfering Data
-                //startActivity(i);
 
-                //reset the text
-
+                }
+            } catch (NoSuchElementException e){
+                return;
             }
 
 
-            //incomingmessages.setText(messages);
 
+            //Intent i = new Intent(BluetoothActivity.this, DisplayingData.class); //transfering Data
+            //startActivity(i);
 
+            //reset the text
 
         }
 
 
+        //incomingmessages.setText(messages);
     };
+
+
+
 
 
 
@@ -301,11 +294,16 @@ public class DisplayingData extends AppCompatActivity implements ConnectionCallb
         mTimer = new Runnable() {
             @Override
             public void run() {
-                graphLastXValue += 0.25d;
-                mSeries.appendData(new DataPoint(graphLastXValue, getRandom()), true, 22);
-                mSeries1.appendData(new DataPoint(graphLastXValue, getRandom()), true, 22);
-                mSeries2.appendData(new DataPoint(graphLastXValue, getRandom()), true, 22);
-                mHandler.postDelayed(this, 330);
+
+                try {
+                    graphLastXValue += 0.25d;
+                    mSeries.appendData(new DataPoint(graphLastXValue, st), true, 22);
+                    mSeries1.appendData(new DataPoint(graphLastXValue, mo), true, 22);
+                    mSeries2.appendData(new DataPoint(graphLastXValue, em), true, 22);
+                    mHandler.postDelayed(this, 330);
+                }catch(NoSuchElementException e){
+
+                }
             }
         };
         mHandler.postDelayed(mTimer, 1500);
@@ -394,7 +392,12 @@ public class DisplayingData extends AppCompatActivity implements ConnectionCallb
 
 
 
-    double mLastRandom = 2;
+
+
+
+
+
+    double mLastRandom = 56;
     Random mRand = new Random();
     private double getRandom() {
         return mLastRandom += mRand.nextDouble()*0.5 - 0.25;
