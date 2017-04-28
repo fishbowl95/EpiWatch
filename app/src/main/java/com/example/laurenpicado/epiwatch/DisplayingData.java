@@ -224,19 +224,6 @@ public class DisplayingData extends AppCompatActivity implements ConnectionCallb
 
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
     private void initializeData(){
         persons = new ArrayList<>();
         //persons.add(new Person("Stress:"+"                                         "+timeStamp, "Motion:", "EMG:"));
@@ -246,14 +233,6 @@ public class DisplayingData extends AppCompatActivity implements ConnectionCallb
     }
 
 
-
-
-
-
-
-        //persons.add(new Person("Stress:", "Motion:", "EMG:"));
-        //persons.add(new Person("Stress:", "Motion:", "EMG:")
-
     private void initializeAdapter(){
 
         RVAdapter adapter = new RVAdapter(persons);
@@ -262,10 +241,6 @@ public class DisplayingData extends AppCompatActivity implements ConnectionCallb
 
 
     }
-
-
-
-
 
     private void showData(DataSnapshot dataSnapshot) {
 
@@ -354,7 +329,7 @@ public class DisplayingData extends AppCompatActivity implements ConnectionCallb
                     //Log.d(TAG, "show mo: "+ mo);
                     //Log.d(TAG, "show em: "+ em);
                     sms();
-                    persons.add(new Person("Stress:"+"                                         "+timeStamp, "Motion:", "EMG:"));
+                    persons.add(new Person("Stress:"+ st+"                                     "+timeStamp, "Motion:" + mo, "EMG:" + em));
                 }else{
                     return;
                 }
