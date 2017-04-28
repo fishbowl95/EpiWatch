@@ -80,7 +80,7 @@ public class DisplayingData extends AppCompatActivity implements ConnectionCallb
     private Integer mo;
     private Integer em;
 
-    private Integer kk;
+
 
     String one;
     String two;
@@ -116,7 +116,7 @@ public class DisplayingData extends AppCompatActivity implements ConnectionCallb
         FirebaseUser user = mAuth.getCurrentUser();
         userID = user.getUid();
 
-        kk = 5;
+
         
 
         rv = (RecyclerView) findViewById(R.id.rv);
@@ -125,21 +125,6 @@ public class DisplayingData extends AppCompatActivity implements ConnectionCallb
         rv.setLayoutManager(llm);
         initializeData();
         initializeAdapter();
-        //seizure();
-
-
-
-
-
-
-
-
-        //seizuredetected();
-
-
-
-
-
 
 
 
@@ -254,7 +239,7 @@ public class DisplayingData extends AppCompatActivity implements ConnectionCallb
 
     private void initializeData(){
         persons = new ArrayList<>();
-        persons.add(new Person("Stress:"+"                                         "+timeStamp, "Motion:", "EMG:"));
+        //persons.add(new Person("Stress:"+"                                         "+timeStamp, "Motion:", "EMG:"));
 
 
 
@@ -369,6 +354,9 @@ public class DisplayingData extends AppCompatActivity implements ConnectionCallb
                     //Log.d(TAG, "show mo: "+ mo);
                     //Log.d(TAG, "show em: "+ em);
                     sms();
+                    persons.add(new Person("Stress:"+"                                         "+timeStamp, "Motion:", "EMG:"));
+                }else{
+                    return;
                 }
             } catch (NoSuchElementException e){
                 return;
