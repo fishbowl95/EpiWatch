@@ -9,7 +9,12 @@ import android.widget.TextView;
 
 import java.util.List;
 
+
+
+
 public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder> {
+
+
 
     public static class PersonViewHolder extends RecyclerView.ViewHolder {
 
@@ -35,7 +40,11 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder> 
 
     RVAdapter(List<Person> persons){
         this.persons = persons;
+
+
     }
+
+
 
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {

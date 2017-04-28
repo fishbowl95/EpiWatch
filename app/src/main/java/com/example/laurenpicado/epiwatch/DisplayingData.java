@@ -1,10 +1,7 @@
 package com.example.laurenpicado.epiwatch;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.IntentSender;
+import android.content.*;
+import android.content.pm.InstrumentationInfo;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
@@ -20,7 +17,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
@@ -30,23 +26,22 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.*;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
+import android.support.v4.widget.SwipeRefreshLayout;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Random;
-import java.util.StringTokenizer;
-import java.util.UUID;
 
+
+
+import java.util.*;
+import java.util.Date;
+import java.text.SimpleDateFormat;
+
+
+import static android.R.attr.data;
+import static android.R.attr.value;
 import static com.example.laurenpicado.epiwatch.R.layout.activity_displaying_data;
 
 
@@ -79,15 +74,27 @@ public class DisplayingData extends AppCompatActivity implements ConnectionCallb
     private List<Person> persons;
     private RecyclerView rv;
 
-    private Integer st;
+
+
+    public Integer st;
     private Integer mo;
     private Integer em;
+
+    private Integer kk;
+
+    String one;
+    String two;
+    String three;
+
 
     TextView Stress;
     TextView Motion;
     TextView EMG;
-    StringBuilder Contacts;
+
     StringBuilder messages;
+    private  String userID;
+    String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+
 
 
     //GraphView GraphView;
@@ -106,6 +113,11 @@ public class DisplayingData extends AppCompatActivity implements ConnectionCallb
         Motion = (TextView) findViewById(R.id.Motion);
         EMG = (TextView) findViewById(R.id.EMG);
 
+        FirebaseUser user = mAuth.getCurrentUser();
+        userID = user.getUid();
+
+        kk = 5;
+        
 
         rv = (RecyclerView) findViewById(R.id.rv);
         rv.setHasFixedSize(true);
@@ -113,6 +125,22 @@ public class DisplayingData extends AppCompatActivity implements ConnectionCallb
         rv.setLayoutManager(llm);
         initializeData();
         initializeAdapter();
+        //seizure();
+
+
+
+
+
+
+
+
+        //seizuredetected();
+
+
+
+
+
+
 
 
         GraphView graph = (GraphView) findViewById(R.id.graph);
@@ -178,16 +206,24 @@ public class DisplayingData extends AppCompatActivity implements ConnectionCallb
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-
-
                 Object value = dataSnapshot.getValue();
 
                 Log.d(TAG, "Value is: " + value);
 
 
+                showData(dataSnapshot);
+
+
+
+
+
+
+
             }
+
 
 
             @Override
@@ -198,16 +234,93 @@ public class DisplayingData extends AppCompatActivity implements ConnectionCallb
         });
 
 
+
+
+
     }
 
 
-    public void sendText(View view) {
 
 
-        SmsManager smsManager = SmsManager.getDefault();
-        smsManager.sendTextMessage("6505551212", null, "I am having a seizure" + " " + "at Lat:" + currentLatitude + " " + "Long:" + currentLongitude, null, null);
-        smsManager.sendTextMessage("6505551212", null, "I am having a seizure" + " " + "at Lat:" + currentLatitude + " " + "Long:" + currentLongitude, null, null);
-        smsManager.sendTextMessage("6505551212", null, "I am having a seizure" + " " + "at Lat:" + currentLatitude + " " + "Long:" + currentLongitude, null, null);
+
+
+
+
+
+
+
+
+
+
+    private void initializeData(){
+        persons = new ArrayList<>();
+        persons.add(new Person("Stress:"+"                                         "+timeStamp, "Motion:", "EMG:"));
+
+
+
+    }
+
+
+
+
+
+
+
+        //persons.add(new Person("Stress:", "Motion:", "EMG:"));
+        //persons.add(new Person("Stress:", "Motion:", "EMG:")
+
+    private void initializeAdapter(){
+
+        RVAdapter adapter = new RVAdapter(persons);
+        rv.setAdapter(adapter);
+        //adapter.notifyItemInserted(0);
+
+
+    }
+
+
+
+
+
+    private void showData(DataSnapshot dataSnapshot) {
+
+        for(DataSnapshot ds :dataSnapshot.getChildren()){
+
+
+
+                UserInformation uInfo = new UserInformation();
+
+                uInfo.setContact_1(ds.child("Emergency_Contacts").getValue(UserInformation.class).getContact_1());
+                uInfo.setContact_2(ds.child("Emergency_Contacts").getValue(UserInformation.class).getContact_2());
+                uInfo.setContact_3(ds.child("Emergency_Contacts").getValue(UserInformation.class).getContact_3());
+
+
+                Log.d(TAG, "showData" + uInfo.getContact_1());
+                Log.d(TAG, "showData" + uInfo.getContact_2());
+                Log.d(TAG, "showData" + uInfo.getContact_3());
+
+                //one.append(uInfo.getContact_1());
+                //two.append(uInfo.getContact_2());
+                //three.append(uInfo.getContact_3());
+                 one = uInfo.getContact_1().toString();
+                 two = uInfo.getContact_2().toString();
+                 three = uInfo.getContact_3().toString();
+
+
+        }
+    }
+
+
+
+    private void sms() {
+
+
+
+            SmsManager smsManager = SmsManager.getDefault();
+            smsManager.sendTextMessage(one, null, "I am having a seizure" + " " + "at Lat:" + currentLatitude + " " + "Long:" + currentLongitude, null, null);
+            smsManager.sendTextMessage(two, null, "I am having a seizure" + " " + "at Lat:" + currentLatitude + " " + "Long:" + currentLongitude, null, null);
+            smsManager.sendTextMessage(three, null, "I am having a seizure" + " " + "at Lat:" + currentLatitude + " " + "Long:" + currentLongitude, null, null);
+
 
 
     }
@@ -248,6 +361,14 @@ public class DisplayingData extends AppCompatActivity implements ConnectionCallb
                     EMG.setText(third);
 
 
+
+                }
+
+                if (st >= 89 && mo >= 69 && em >= 70) {
+                    //Log.d(TAG, "show st: " + st);
+                    //Log.d(TAG, "show mo: "+ mo);
+                    //Log.d(TAG, "show em: "+ em);
+                    sms();
                 }
             } catch (NoSuchElementException e){
                 return;
@@ -301,6 +422,8 @@ public class DisplayingData extends AppCompatActivity implements ConnectionCallb
                     mSeries1.appendData(new DataPoint(graphLastXValue, mo), true, 22);
                     mSeries2.appendData(new DataPoint(graphLastXValue, em), true, 22);
                     mHandler.postDelayed(this, 330);
+
+
                 }catch(NoSuchElementException e){
 
                 }
@@ -403,17 +526,7 @@ public class DisplayingData extends AppCompatActivity implements ConnectionCallb
         return mLastRandom += mRand.nextDouble()*0.5 - 0.25;
     }
 
-    private void initializeData(){
-        persons = new ArrayList<>();
-        persons.add(new Person("Stress:", "Motion:", "EMG:"));
-        persons.add(new Person("Stress:", "Motion:", "EMG:"));
-        persons.add(new Person("Stress:", "Motion:", "EMG:"));
-    }
 
-    private void initializeAdapter(){
-        RVAdapter adapter = new RVAdapter(persons);
-        rv.setAdapter(adapter);
-    }
 
 
 

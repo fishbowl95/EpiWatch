@@ -49,34 +49,6 @@
             android:layout_below="@+id/person_stress"
             android:textSize="12sp" />
 
-        <TextClock
-            android:id="@+id/textClock"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#000000"
-            android:layout_above="@+id/person_motion"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginLeft="175dp"
-            android:layout_marginStart="175dp"
-            android:ems="10"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:textSize="12sp"/>
-
-
-        <TextView
-            android:id="@+id/editText5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/person_emg"
-            android:layout_alignLeft="@+id/textClock"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignStart="@+id/textClock"
-            android:layout_below="@+id/person_motion"
-            android:ems="10"
-            android:hint="Date" />
 
     </RelativeLayout>
 
